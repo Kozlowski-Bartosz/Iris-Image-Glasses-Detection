@@ -23,8 +23,8 @@ def detect_glasses(image):
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
     
     # Apply Canny edge detection
-    edges = cv2.Canny(gray, 50, 150)
-    cv2.imshow('Canny', edges)
+    edges = cv2.Canny(gray, 50, 100)
+    
     
     # Define region of interest (ROI) as the ocular area
     rows, cols = edges.shape[:2]
@@ -40,13 +40,14 @@ def detect_glasses(image):
     # Define kernel for dilation
     kernel = np.ones((5,5),np.uint8)
     edges = cv2.dilate(edges,kernel,iterations = 1)
+    cv2.imshow('Canny', edges)
     
     # Define the Hough transform parameters
     rho = 1
     theta = np.pi/180
     threshold = 15
     min_line_length = 50
-    max_line_gap = 10
+    max_line_gap = 5
     
     # Run Hough transform on the edges image
     lines = cv2.HoughLinesP(edges, rho, theta, threshold, np.array([]), min_line_length, max_line_gap)

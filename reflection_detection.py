@@ -17,21 +17,30 @@ def apply_mask(input_image, mask):
     mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
     img = input_image.copy()
     #m = cv2.threshold(mask, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    img[mask == 255] = (0,0,255)
+    img[mask == 255] = (0,255,0)
     
     return img
 
-def count_reflections(im):
-    imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+def count_reflections(mask):
+    imgray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
     thresh = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 199, 5)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    print(len(contours))
+    
+    number_of_white = np.sum(imgray == 255)
+    number_of_black = np.sum(imgray == 0)
+    percentage = number_of_white / (number_of_white + number_of_black) * 100
+    
+    return percentage
+    
+    #print("Percentage of white pixels: " + str(percentage) + "%")
+    #print("Number of reflections: " + str(len(contours)))
+
     
 def process_image(im, thresh):
     denoised_im = im.copy()
     denoised_im = reduce_noise(denoised_im)
     mask = mask_reflections(denoised_im, threshold=thresh)
     masked = apply_mask(im, mask)
-    count_reflections(mask)
+    percentage = count_reflections(mask)
     hori = np.concatenate((im, mask, masked), axis=1)
-    cv2.imshow("Image", hori)
+    return hori, percentage
