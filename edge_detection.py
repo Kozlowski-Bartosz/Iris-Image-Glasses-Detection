@@ -13,7 +13,7 @@ def sobel_detection(input_image):
     sobely = cv2.morphologyEx(sobely, cv2.MORPH_RECT, np.ones((5,5), np.uint8))
     
     
-    cv2.imshow('Sobel Y', sobely)
+    #cv2.imshow('Sobel Y', sobely)
     
 def detect_glasses(image):
     # Convert image to grayscale
@@ -40,14 +40,14 @@ def detect_glasses(image):
     # Define kernel for dilation
     kernel = np.ones((5,5),np.uint8)
     edges = cv2.dilate(edges,kernel,iterations = 1)
-    cv2.imshow('Canny', edges)
+    #cv2.imshow('Canny', edges)
     
     # Define the Hough transform parameters
     rho = 1
     theta = np.pi/180
-    threshold = 15
+    threshold = 25
     min_line_length = 50
-    max_line_gap = 5
+    max_line_gap = 2
     
     # Run Hough transform on the edges image
     lines = cv2.HoughLinesP(edges, rho, theta, threshold, np.array([]), min_line_length, max_line_gap)
@@ -57,7 +57,8 @@ def detect_glasses(image):
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line[0]
-            if (y2-y1)/(x2-x1) < 0: # Checking the inclination of the lines
-                cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
-                line_amount += 1
+            
+            #if (y2-y1)/(x2-x1) < 0: # Checking the inclination of the lines
+            cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+            line_amount += 1
     return image, line_amount

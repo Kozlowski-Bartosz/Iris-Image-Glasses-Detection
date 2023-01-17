@@ -14,11 +14,13 @@ resized_img = cv2.resize(img, (320, 240))
 
 #May differ depending on image brightness
 reflections_img, reflections_perc = rd.process_image(resized_img, 180)
-cv2.imshow("Reflections", reflections_img)
 print("Reflections percentage: " + str(reflections_perc))
 edges_image, line_amount = ed.detect_glasses(resized_img)
-cv2.imshow("Edges", edges_image)
+
 print("Line amount: " + str(line_amount))
+
+cv2.imshow("Reflections", reflections_img)
+cv2.imshow("Edges", edges_image)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
