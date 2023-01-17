@@ -15,6 +15,7 @@ reflections = dataset[:,0]
 edges = dataset[:,1]
 
 print("Dataset: " + str(dataset))
+print("Maximum reflection: " + str(np.amax(reflections)))
 
 fig = plt.figure(figsize =(10, 7))
 plt.hist(edges, bins = 70)
@@ -22,7 +23,7 @@ plt.title("Edge histogram")
 plt.show()
 
 fig = plt.figure(figsize =(10, 7))
-plt.hist(reflections, bins = 50, range=(0,1), log=True)
+plt.hist(reflections, bins = 50, range=(0,10), log=True)
 plt.title("Reflection histogram")
 plt.show()
 
