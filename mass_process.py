@@ -11,7 +11,7 @@ dir = ""
 pattern_jpg = "*.jpg"
 pattern_png = "*.png"
 
-if len(argv) == 1:
+if len(argv) != 3:
     print("Usage: python mass_process.py <target path> <output path>")
     sysexit()
 else:
@@ -19,7 +19,7 @@ else:
     outputdir = argv[2]
 
 
-fields = ['filename', 'percentage', 'line_amount']
+fields = ['last_dir', 'filename', 'percentage', 'line_amount']
 rows = []
 
 
@@ -31,8 +31,9 @@ for path, subdirs, files in os.walk(dir):
             resized_img = cv2.resize(img, (320, 240))
             reflections_img, reflections_perc = rd.process_image(resized_img, 180)
             edges_image, line_amount = ed.detect_glasses(resized_img)
+            last_dir = os.path.basename(os.path.normpath(path))
 
-            rows.append([name, reflections_perc, line_amount])
+            rows.append([last_dir, name, reflections_perc, line_amount])
             continue
 
 if not os.path.isdir(outputdir):

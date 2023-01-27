@@ -16,6 +16,7 @@ resized_img = cv2.resize(img, (320, 240))
 reflections_img, reflections_perc = rd.process_image(resized_img, 180)
 print("Reflections percentage: " + str(reflections_perc))
 edges_image, line_amount = ed.detect_glasses(resized_img)
+ed.sobel_detection(resized_img)
 
 print("Line amount: " + str(line_amount))
 

@@ -7,7 +7,8 @@ def reduce_noise(input_image):
 def mask_reflections(input_image, kernel_size=5, threshold=180):
     grayscale = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
     kernel = np.ones((kernel_size,kernel_size),np.uint8)   
-    modifier = grayscale.mean() / 2 #Adding a modifier to filter out overexposed images
+    modifier = grayscale.mean() / 2 #Adding a modifier to filter out overexposed images ||| !!! Also causes some of the reflections to be filtered out
+    modifier = 0
     th, mask = cv2.threshold(grayscale, threshold + modifier, 255, cv2.THRESH_BINARY)
     #th, mask = cv2.threshold(grayscale, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)   #Reflections smaller than the kernel size are removed
@@ -19,7 +20,6 @@ def apply_mask(input_image, mask):
     img = input_image.copy()
     #m = cv2.threshold(mask, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     img[mask == 255] = (0,255,0)    #Paint it green
-    
     return img
 
 def count_reflections(mask):
