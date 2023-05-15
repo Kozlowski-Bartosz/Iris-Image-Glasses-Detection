@@ -67,17 +67,26 @@ def determine_error_rate():
     far = 0
     frr = 0
     total_counted = 0
+    total_glasses_counted = 0
+    total_non_glasses_counted = 0
     is_correct = np.genfromtxt("output.csv", delimiter=",", skip_header=1, usecols=[4,5])
     for value in is_correct:
         if value[0] == 1 and value[1] == 0:
             far += 1
         elif value[0] == 0 and value[1] == 0:
             frr += 1
+        if value[0] == 1:
+            total_glasses_counted += 1
+        if value[0] == 0:
+            total_non_glasses_counted += 1
         total_counted += 1
+        
     print("Total images: " + str(total_counted))
     print("Errors: " + str(frr + far))
     print("False Acceptance Rate (glasses present, not detected): " + str(100*far/total_counted) + "%")
     print("False Rejection Rate (glasses not present, but detected): " + str(100*frr/total_counted) + "%")
+    print("CCR with glasses: " + str(100-100*far/total_glasses_counted) + "%")
+    print("CCR without glasses: " + str(100-100*frr/total_non_glasses_counted) + "%")
     print("Total error rate: " + str(100*(far+frr)/total_counted) + "%")
     print("Total correct: " + str(100*(total_counted - (far+frr))/total_counted) + "%")
 
